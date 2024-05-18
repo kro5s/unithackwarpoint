@@ -1,3 +1,36 @@
+@font-face {
+    font-family: "Gilroy";
+    font-weight: 400;
+    src: local("Gilroy"),
+    url("assets/fonts/Gilroy-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Gilroy";
+    font-weight: 600;
+    src: local("Gilroy"),
+    url("assets/fonts/Gilroy-Semibold.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Gilroy";
+    font-weight: 700;
+    src: local("Gilroy"),
+    url("assets/fonts/Gilroy-Bold.woff2") format("woff2");
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    font-family: "Gilroy", "Inter", sans-serif;
+    background: #252422;
+    color: #fff;
+}
+
+.my-container {
+    max-width: 1200px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
