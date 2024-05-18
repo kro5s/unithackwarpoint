@@ -1,6 +1,7 @@
 import React from 'react';
 import {useHideScroll} from "../../hooks/hooks";
 import {IProduct} from "../../types/models";
+import Button, {ButtonTypes} from "../UI/Button/Button";
 
 type Props = IProduct & { opened: boolean, closeModal: () => void }
 
@@ -14,7 +15,26 @@ const CardModal: React.FC<Props> = ({ opened, closeModal, category, img, content
             <div className="relative bg-dark-bg my-20 h-fit rounded-xl shadow p-16"
                  onMouseDown={(e) => e.stopPropagation()}
             >
-
+                <div className="flex gap-x-16">
+                    <div>
+                        <img src={img} alt={name} className="rounded object-cover w-[460px] h-[260px]"/>
+                        <div className="mt-4 flex justify-between">
+                            <img src={img} alt={name} className="size-[60px] rounded"/>
+                            <img src={img} alt={name} className="size-[60px] rounded"/>
+                            <img src={img} alt={name} className="size-[60px] rounded"/>
+                            <img src={img} alt={name} className="size-[60px] rounded"/>
+                            <img src={img} alt={name} className="size-[60px] rounded"/>
+                            <img src={img} alt={name} className="size-[60px] rounded"/>
+                        </div>
+                    </div>
+                    <div className="max-w-[270px]">
+                        <div><span className="font-bold text-2xl">{name}</span></div>
+                        <div className="pt-2 pb-4"><span className="text-sm text-white/[.2]">{category}</span></div>
+                        <p>{content}</p>
+                        <div className="mt-16 mb-6"><span className="font-bold text-2xl">{price}₽</span></div>
+                        <Button type={ButtonTypes.OUTLINED}>Добавить в корзину</Button>
+                    </div>
+                </div>
 
                 <button className="absolute top-6 right-6" onClick={closeModal}>
                     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
