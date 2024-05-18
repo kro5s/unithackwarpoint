@@ -1,7 +1,9 @@
 services:
   web:
-    build: .
+    image: unit_endpoints
+    container_name: unit_endpoints
     ports:
-      - "8000:8000"
+      - target: 8000
+        published: 8000
   postgres:
     image: "postgres"
