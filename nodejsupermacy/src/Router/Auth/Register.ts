@@ -1,6 +1,5 @@
 import Route from "../../Types/Route";
 import {createHash} from "node:crypto";
-import App from "../../App";
 import Token from "../../Service/Token";
 import User from "../../Service/User";
 import {EmailIsUsedError, PhoneIsUsedError} from "../../Types/Errors";
@@ -25,7 +24,7 @@ export default new Route(
 			}
 			const hashedPassword = createHash("sha256").update(password).digest("hex")
 			const user = await User.create(email, name, phone, hashedPassword)
-			const [access, refresh] = Token.issue(user)
+			const [access, refresh] = Token.issue({email, name, phone, id: user.id})
 			res.status(200).json({message: "ok", auth: {access, refresh}})
 		} catch (e) {
 			console.error(e)

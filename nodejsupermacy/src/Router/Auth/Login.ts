@@ -20,7 +20,12 @@ export default new Route(
 			const user = await User.get({email, phone})
 			if (user.password != hashedPassword)
 				return res.status(401).json({error: {message: "Incorrect password"}})
-			const [access, refresh] = Token.issue(user)
+			const [access, refresh] = Token.issue({
+				id: user.id,
+				email: user.email,
+				phone: user.phone,
+				name: user.name
+			})
 			res.status(200).json({message: "ok", auth: {access, refresh}})
 		} catch (e) {
 			console.error(e)
