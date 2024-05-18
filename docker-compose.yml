@@ -1,0 +1,61 @@
+services:
+  gateway:
+    image: nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/conf.d/default.conf
+        read_only: true
+    depends_on:
+      - frontend
+      - nodejs
+      - python
+
+  frontend:
+    build: './client'
+
+  nodejs:
+    build: './nodejsupermacy'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - "./keys:/app/keys:r"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?schema=public
+      PUBLIC_KEY: /keys/public.pem
+      PRIVATE_KEY: /keys/private.pem
+
+  python:
+    build: './server'
+    environment:
+      DISABLE_NEST_ASYNCIO: True
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_ADDRESS: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: "postgres"
+    attach: false
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 2s
+      timeout: 5s
+      retries: 5
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+volumes:
+  postgres-data:

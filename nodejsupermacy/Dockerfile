@@ -4,6 +4,7 @@ COPY . .
 RUN yarn
 RUN yarn build
 RUN yarn cache clean
+RUN chmod +x ./get-dev-deps.js
 RUN yarn remove $(./get-dev-deps.js)
 VOLUME ./.env
 EXPOSE 3200

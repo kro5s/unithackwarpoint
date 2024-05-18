@@ -3,7 +3,7 @@ import Token from "../../Service/Token";
 import {JsonWebTokenError, TokenExpiredError} from "jsonwebtoken";
 
 export default new Route(
-	"refresh",
+	"/refresh",
 	"post",
 	async (req, res) => {
 		try {
