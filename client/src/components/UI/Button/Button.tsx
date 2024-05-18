@@ -4,7 +4,7 @@ export enum ButtonTypes {
     OUTLINED
 }
 
-const Button: React.FC<{ type?: ButtonTypes, className?: string, children: React.ReactNode }> = ({ type, className, children }) => {
+const Button: React.FC<{ type?: ButtonTypes, className?: string, children: React.ReactNode, onClick?: () => void }> = ({ type, className, children, onClick }) => {
     let buttonClasses = "py-2 px-4 rounded font-bold text-sm transition "
 
     switch (type) {
@@ -16,7 +16,7 @@ const Button: React.FC<{ type?: ButtonTypes, className?: string, children: React
     }
 
     return (
-        <button className={buttonClasses + (className ? className : '')}>
+        <button className={buttonClasses + (className ? className : '')} onClick={onClick}>
             {children}
         </button>
     );

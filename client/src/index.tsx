@@ -7,6 +7,7 @@ import {Provider} from "react-redux";
 import store from "./store/store";
 import AccountSettingsRoute from "./routes/AccountSettingsRoute";
 import OrdersHistoryRoute from "./routes/OrdersHistoryRoute";
+import CartRoute from "./routes/CartRoute";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
     {
         path: '/ordersHistory',
         element: <OrdersHistoryRoute />
+    },
+    {
+        path: '/cart',
+        element: <CartRoute />
     },
     {
         path: '/*',

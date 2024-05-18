@@ -18,3 +18,13 @@ export const useCloseByClickingOutside = (openFlag: boolean, closeHandler: React
         })
     }, [openFlag])
 }
+
+export const useHideScroll = (deps: any[]) => {
+    useEffect(() => {
+        document.body.style.overflowY = "hidden"
+
+        return () => {
+            document.body.style.overflowY = "auto"
+        }
+    }, deps)
+}
