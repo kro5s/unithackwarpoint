@@ -69,7 +69,7 @@ async def initData():
 
 
 loop = asyncio.get_event_loop()
-# loop.run_until_complete(initData())
+loop.run_until_complete(initData())
 
 pubkey_raw = open("/app/data/pubkeys/public.pem", "rb").read()
 pubkey = jwt.jwk_from_pem(pubkey_raw)
@@ -193,7 +193,12 @@ async def get_cart(request: fastapi.Request):
 
 @app.post(base_url + "/cart/add_item")
 async def add_item(request: fastapi.Request):
-    ok, token_payload = await getPayload(request)
+    try:
+        ok, token_payload = await getPayload(request)
+    except Exception as ex:
+        return fastapi.responses.JSONResponse({"message": ex},
+                                              status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     if not ok:
         return fastapi.responses.JSONResponse({"message": "Token is not valid"},
                                               status_code=status.HTTP_401_UNAUTHORIZED)
@@ -206,8 +211,7 @@ async def add_item(request: fastapi.Request):
         new_quantity = body["quantity"]
 
     except Exception as ex:
-        body = {"message": ex}
-        return fastapi.responses.JSONResponse(body,
+        return fastapi.responses.JSONResponse({"message": ex},
                                               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     try:
@@ -230,7 +234,7 @@ async def set_quantity(request: fastapi.Request):
 
         user_id = token_payload["data"]["id"]
         cart_item_id = body["id"]
-        new_quantity = request.headers["quantity"]
+        new_quantity = body["quantity"]
 
     except Exception as ex:
         body = {"message": ex}
