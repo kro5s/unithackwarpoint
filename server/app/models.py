@@ -6,7 +6,7 @@ class Item(Model):
     description = fields.TextField()
     price = fields.IntField()
     image_url = fields.TextField()
-    type = fields.TextField()
+    merch_type = fields.TextField()
 
 class Order(Model):
     id = fields.IntField(pk=True)

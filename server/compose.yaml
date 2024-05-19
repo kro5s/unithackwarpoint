@@ -2,6 +2,8 @@ services:
   web:
     image: unit_endpoints
     container_name: unit_endpoints
+    volumes:
+      - unit:/home/backend_data
     ports:
       - target: 8000
         published: 8000
@@ -11,6 +13,7 @@ services:
       PGUSER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_ADDRESS: postgres
+      BASE_URL_SHOP: ${BASE_URL_SHOP}
     depends_on:
       postgres:
         condition: service_healthy
