@@ -215,7 +215,11 @@ async def add_item(request: fastapi.Request):
                                               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     try:
-        await models.CartItem.update_or_create(productId=product_id, quantity=new_quantity, cartId=user_id)
+        cart = await models.CartItem.get(cartId=user_id)
+        cart.quantity += new_quantity
+        await cart.save()
+    except tortoise.exceptions.DoesNotExist as ex:
+        await models.CartItem.create(cartId=user_id, productId=product_id, quantity=new_quantity)
     except Exception as ex:
         return fastapi.responses.JSONResponse({"message": ex}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
