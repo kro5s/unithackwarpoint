@@ -3,16 +3,20 @@ import os
 from pathlib import Path
 
 import jwt
-import fastapi
 import tortoise
-from fastapi import FastAPI, status
 from tortoise import Tortoise
+import fastapi
+from fastapi import FastAPI, status
+from fastapi.middleware.cors import CORSMiddleware
+
 
 import nest_asyncio
 
 nest_asyncio.apply()
 
 import models
+
+
 
 
 async def init():
@@ -81,6 +85,17 @@ async def getPayload(request: fastapi.Request) -> tuple[bool, dict]:
 
 app = FastAPI()
 
+origins = [
+    "*"
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 base_url = os.getenv("BASE_URL_SHOP")
 if base_url is None:
     base_url = ""
@@ -126,34 +141,6 @@ async def getProductInfo(product_id: int, request: fastapi.Request):
     return fastapi.responses.JSONResponse(body,
                                           status_code=status.HTTP_200_OK)
 
-@app.get(base_url + "/review_info")
-async def getReviewInfo(request: fastapi.Request):
-    ok, token_payload = await getPayload(request)
-    if not ok:
-        return fastapi.responses.JSONResponse({"message": "Token is not valid"},
-                                              status_code=status.HTTP_401_UNAUTHORIZED)
-
-    try:
-        review_id = request.query_params.get("review_id")
-    except Exception as ex:
-        body = {"message": f"Unknown error: {ex}"}
-        return fastapi.responses.JSONResponse(body, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    try:
-        review_info = await models.Review.get(id=review_id).values()
-    except tortoise.exceptions.DoesNotExist as ex:
-        body = {"message": f"Specified review_id doesn't exist"}
-        return fastapi.responses.JSONResponse(body, status_code=status.HTTP_400_BAD_REQUEST)
-
-    body = {
-        "review_id": review_info["id"],
-        "review_author": review_info["author"],
-        "review_description": review_info["description"],
-        "review_stars": review_info["stars"]
-    }
-    return fastapi.responses.JSONResponse(body,
-                                          status_code=status.HTTP_200_OK)
-
 
 @app.get(base_url + "/get_cart")
 async def get_cart(request: fastapi.Request):
@@ -170,6 +157,10 @@ async def get_cart(request: fastapi.Request):
                                               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     try:
+        products_in_cart = []
+        for product_in_cart in await models.CartItem.all():
+            if product_in_cart.id == user_id:
+                products_in_cart.append()
         cart = await models.Cart.get(id=user_id).values()
     except tortoise.exceptions.DoesNotExist as ex:
         await models.Cart.create(products="{}")
@@ -241,3 +232,32 @@ async def get_orders(request: fastapi.Request):
             body, status_code=status.HTTP_401_NOT_ACCEPTABLE)
 
     return status.HTTP_501_NOT_IMPLEMENTED
+
+
+@app.get(base_url + "/review_info")
+async def getReviewInfo(request: fastapi.Request):
+    ok, token_payload = await getPayload(request)
+    if not ok:
+        return fastapi.responses.JSONResponse({"message": "Token is not valid"},
+                                              status_code=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        review_id = request.query_params.get("review_id")
+    except Exception as ex:
+        body = {"message": f"Unknown error: {ex}"}
+        return fastapi.responses.JSONResponse(body, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    try:
+        review_info = await models.Review.get(id=review_id).values()
+    except tortoise.exceptions.DoesNotExist as ex:
+        body = {"message": f"Specified review_id doesn't exist"}
+        return fastapi.responses.JSONResponse(body, status_code=status.HTTP_400_BAD_REQUEST)
+
+    body = {
+        "review_id": review_info["id"],
+        "review_author": review_info["author"],
+        "review_description": review_info["description"],
+        "review_stars": review_info["stars"]
+    }
+    return fastapi.responses.JSONResponse(body,
+                                          status_code=status.HTTP_200_OK)
