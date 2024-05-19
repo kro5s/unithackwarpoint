@@ -210,7 +210,10 @@ async def set_quantity(request: fastapi.Request):
         return fastapi.responses.JSONResponse(body,
                                               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    await models.CartItem.update_or_create(product_id=product_id, quantity=new_quantity, cart_id=user_id)
+    try:
+        await models.CartItem.update_or_create(product_id=product_id, quantity=new_quantity, cart_id=user_id)
+    except Exception as ex:
+        return fastapi.responses.JSONResponse({"message": ex}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return fastapi.responses.JSONResponse({"message": "ok"}, status_code=status.HTTP_200_OK)
 
