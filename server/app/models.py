@@ -1,20 +1,22 @@
 from tortoise import Model, fields
 
-class Item(Model):
+class Product(Model):
     id = fields.IntField(pk=True)
     name = fields.TextField()
-    description = fields.TextField()
     price = fields.IntField()
-    image_url = fields.TextField()
-    merch_type = fields.TextField()
+    img = fields.TextField()
+    category = fields.TextField()
+    content = fields.TextField()
 
 class Order(Model):
     id = fields.IntField(pk=True)
 
 
-class Cart(Model):
-    id = fields.IntField(pk=True)
-    items_ids = fields.JSONField()
+class CartItem(Model):
+    id = fields.IntField()
+    cart_id = fields.IntField(pk=True)
+    product_id = fields.IntField()
+    quantity = fields.IntField()
 
 
 class Review(Model):

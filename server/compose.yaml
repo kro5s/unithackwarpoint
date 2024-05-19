@@ -3,7 +3,7 @@ services:
     image: unit_endpoints
     container_name: unit_endpoints
     volumes:
-      - unit:/home/backend_data
+      - unit:/home/postgres_data
     ports:
       - target: 8000
         published: 8000

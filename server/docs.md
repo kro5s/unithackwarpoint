@@ -111,7 +111,7 @@ Body:
 ```json
 {
   "token": "string, required",
-  "items": {
+  "products": {
       "item_1": 1,
       "item_7": 10,
       "item_13": 4 

@@ -33,18 +33,20 @@ loop.run_until_complete(init())
 
 
 async def initData():
-    await models.Item.create(id=1,
-                             name="adwad",
-                             description="desc",
-                             price=123,
-                             image_url="123",
-                             merch_type="tshirt")
-    await models.Item.create(id=2,
-                             name="adwad",
-                             description="desc",
-                             price=123,
-                             image_url="123",
-                             merch_type="tshirt")
+    await models.Product.create(id=1,
+                                name="adwad",
+                                price=123,
+                                img="1234",
+                                category="tshirt",
+                                content="description")
+    await models.Product.create(id = 2,
+                                name = "adwad",
+                                price = 123,
+                                img = "1234",
+                                category = "tshirt",
+                                content = "description")
+    # await models.Cart.create(id=1, products=await models.Product.get(id=1))
+    ...
 
 
 
@@ -55,6 +57,7 @@ pubkey_raw = open("/app/data/pubkeys/public.pem", "rb").read()
 pubkey = jwt.jwk_from_pem(pubkey_raw)
 
 instance = jwt.JWT()
+
 async def getPayload(request: fastapi.Request) -> tuple[bool, dict]:
     """
     token example:
@@ -95,33 +98,30 @@ async def root():
 # status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@app.get(base_url + "/item_info")
-async def getItemInfo(request: fastapi.Request):
+@app.get(base_url + "/product/{product_id}")
+async def getProductInfo(product_id: int, request: fastapi.Request):
+
     ok, token_payload = await getPayload(request)
     if not ok:
         return fastapi.responses.JSONResponse({"message": "Token is not valid"}, status_code=status.HTTP_401_UNAUTHORIZED)
 
     try:
-        item_id = request.query_params.get("item_id")
-    except Exception as ex:
-        body = {"message": f"Unknown error: {ex}"}
-        return fastapi.responses.JSONResponse(body, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    try:
-        item_info = await models.Item.get(id=item_id).values()
+        product_info = await models.Product.get(id=int(product_id)).values()
     except tortoise.exceptions.DoesNotExist as ex:
-        body = {"message": f"Specified item_id doesn't exist"}
+        body = {"message": f"Specified product_id doesn't exist"}
         return fastapi.responses.JSONResponse(body, status_code=status.HTTP_400_BAD_REQUEST)
     except Exception as ex:
         body = {"message": f"Unknown error: {ex}"}
         return fastapi.responses.JSONResponse(body, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     body = {
-        "item_id": item_info["id"],
-        "item_price": item_info["price"],
-        "item_description": item_info["description"],
-        "item_image_url": item_info["image_url"],
-        # "item_reviews": item_info.reviews
+        "id": product_info["id"],
+        "name": product_info["name"],
+        "price": product_info["price"],
+        "img": product_info["img"],
+        "category": product_info["category"],
+        "content": product_info["content"],
+        # "product_reviews": product_info.reviews
     }
     return fastapi.responses.JSONResponse(body,
                                           status_code=status.HTTP_200_OK)
@@ -172,36 +172,51 @@ async def get_cart(request: fastapi.Request):
     try:
         cart = await models.Cart.get(id=user_id).values()
     except tortoise.exceptions.DoesNotExist as ex:
-        body = {"message": f"Cart for specified user doesn't exist"}
-        return fastapi.responses.JSONResponse(body, status_code=status.HTTP_400_BAD_REQUEST)
+        await models.Cart.create(products="{}")
+        cart = await models.Cart.get(id=user_id).values()
 
-    body = {"id": cart["id"], "items_ids": cart["items_ids"]}
+    body = {"id": cart.get("id"), "products": cart.get("products")}
     return fastapi.responses.JSONResponse(body,
                                           status_code=status.HTTP_200_OK)
 
 
 @app.post(base_url + "/set_cart")
 async def set_cart(request: fastapi.Request):
-    token_payload = await getPayload(request)
-    items = request.query_params.get("items")
-    return fastapi.responses.JSONResponse(
-        "{}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-
-
-@app.get(base_url + "/retrieve_items")
-async def retrieve_items(request: fastapi.Request):
     ok, token_payload = await getPayload(request)
     if not ok:
         return fastapi.responses.JSONResponse({"message": "Token is not valid"},
                                               status_code=status.HTTP_401_UNAUTHORIZED)
 
     try:
-        items = await models.Item.all().values()
-        body = {"items": items}
+        user_id = token_payload["data"]["id"]
+    except Exception as ex:
+        body = {"message": ex}
+        return fastapi.responses.JSONResponse(body,
+                                              status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    try:
+        products = request.query_params.get("products")
+    except Exception as ex:
+        body = {"message": "You have to provide products. ex. {}"}
+        return fastapi.responses.JSONResponse(body,
+                                              status_code=status.HTTP_400_BAD_REQUEST)
+    return fastapi.responses.JSONResponse(
+        "{}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
+
+
+@app.get(base_url + "/products")
+async def retrieve_products(request: fastapi.Request):
+    ok, token_payload = await getPayload(request)
+    if not ok:
+        return fastapi.responses.JSONResponse({"message": "Token is not valid"},
+                                              status_code=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        products = await models.Product.all().values()
+        body = {"products": products}
         return fastapi.responses.JSONResponse(body,
                                               status_code=status.HTTP_200_OK)
     except Exception as e:
-        body = {"message": f"Items not found, {e}"}
+        body = {"message": f"products not found, {e}"}
         return fastapi.responses.JSONResponse(
             body, status_code=status.HTTP_401_NOT_ACCEPTABLE)
 
@@ -209,7 +224,7 @@ async def retrieve_items(request: fastapi.Request):
 @app.post(base_url + "/place_order")
 async def place_order(request: fastapi.Request):
     token = request.headers.get("token")
-    items = request.query_params.get("items")
+    products = request.query_params.get("products")
     return status.HTTP_501_NOT_IMPLEMENTED
 
 
