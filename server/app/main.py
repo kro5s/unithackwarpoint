@@ -39,6 +39,12 @@ async def initData():
                              price=123,
                              image_url="123",
                              merch_type="tshirt")
+    await models.Item.create(id=2,
+                             name="adwad",
+                             description="desc",
+                             price=123,
+                             image_url="123",
+                             merch_type="tshirt")
 
 
 
@@ -184,20 +190,20 @@ async def set_cart(request: fastapi.Request):
 
 @app.get(base_url + "/retrieve_items")
 async def retrieve_items(request: fastapi.Request):
-    token_payload = await getPayload(request)
-    """
-    Authorization: Bearer <token>
-    """
+    ok, token_payload = await getPayload(request)
+    if not ok:
+        return fastapi.responses.JSONResponse({"message": "Token is not valid"},
+                                              status_code=status.HTTP_401_UNAUTHORIZED)
+
     try:
-        body = {"items": await models.Item.all().values()}
+        items = await models.Item.all().values()
+        body = {"items": items}
         return fastapi.responses.JSONResponse(body,
                                               status_code=status.HTTP_200_OK)
     except Exception as e:
         body = {"message": f"Items not found, {e}"}
         return fastapi.responses.JSONResponse(
             body, status_code=status.HTTP_401_NOT_ACCEPTABLE)
-    return fastapi.responses.JSONResponse(
-        body, status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
 
 @app.post(base_url + "/place_order")

@@ -151,9 +151,14 @@ Response:
 ```json
 {
   "items": {
-      "item_1": 1,
-      "item_7": 10,
-      "item_13": 4 
+      {
+        "id": 1,
+        "name": "adwad",
+        "description": "desc",
+        "price": 123,
+        "image_url": "123",
+        "merch_type": "tshirt"
+      }
     }
 }
 ```
