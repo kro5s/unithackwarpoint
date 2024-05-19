@@ -12,7 +12,7 @@ const defaultRoute = new Route(
 			if (type != "Bearer" || !token)
 				return res.status(401).json({error: {message: "Provide auth with 'Authorization: Bearer <token>'."}})
 			Token.validate(token)
-			let tasks =
+			// let tasks =
 		} catch (e) {
 			console.error(e)
 			if (e instanceof JsonWebTokenError) {
