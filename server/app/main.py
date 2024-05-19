@@ -115,11 +115,6 @@ async def root():
 
 @app.get(base_url + "/product/{product_id}")
 async def getProductInfo(product_id: int, request: fastapi.Request):
-
-    ok, token_payload = await getPayload(request)
-    if not ok:
-        return fastapi.responses.JSONResponse({"message": "Token is not valid"}, status_code=status.HTTP_401_UNAUTHORIZED)
-
     try:
         product_info = await models.Product.get(id=int(product_id)).values()
     except tortoise.exceptions.DoesNotExist as ex:
@@ -196,11 +191,6 @@ async def set_cart(request: fastapi.Request):
 
 @app.get(base_url + "/products")
 async def retrieve_products(request: fastapi.Request):
-    ok, token_payload = await getPayload(request)
-    if not ok:
-        return fastapi.responses.JSONResponse({"message": "Token is not valid"},
-                                              status_code=status.HTTP_401_UNAUTHORIZED)
-
     try:
         products = await models.Product.all().values()
         body = {"products": products}
