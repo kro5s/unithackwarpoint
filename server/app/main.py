@@ -45,13 +45,29 @@ async def initData():
 loop = asyncio.get_event_loop()
 loop.run_until_complete(initData())
 
+pubkey_raw = open("/app/data/pubkeys/public.pem", "rb").read()
+pubkey = jwt.jwk_from_pem(pubkey_raw)
 
-async def getPayload(request: fastapi.Request,
-                     pubkey_path: Path = "/app/data/pubkeys/public.pem"):
-    token = request.headers.get("Authorization").split(" ")[1]
-    with open(pubkey_path, 'r') as pubkey_f:
-        payload = jwt.JWT.decode(token, pubkey_f.read(), algorithms=['RS256'])
-        return payload
+instance = jwt.JWT()
+async def getPayload(request: fastapi.Request) -> tuple[bool, dict]:
+    """
+    token example:
+    {'type': 'access', '
+    data': {'id': 1, 'email': 'email@mail.ru', 'phone': '+121273821', 'name': 'Test'},
+    'iat': 1716109855,
+    'exp': 1716196255}
+    """
+
+    try:
+        token = request.headers.get("Authorization").split(" ")[1]
+    except Exception as ex:
+        return False, {}
+
+    try:
+        payload = instance.decode(token, pubkey)
+    except Exception as ex:
+        return False, {}
+    return True, payload
 
 
 app = FastAPI()
@@ -73,8 +89,9 @@ async def root():
 
 @app.get(base_url + "/item_info")
 async def getItemInfo(request: fastapi.Request):
-    token_payload = await getPayload(request)
-    return fastapi.responses.JSONResponse(token_payload, status_code=status.HTTP_200_OK)
+    ok, token_payload = await getPayload(request)
+    if not ok:
+        return fastapi.responses.JSONResponse({"message": "Token is not valid"}, status_code=status.HTTP_401_UNAUTHORIZED)
 
     try:
         item_id = request.query_params.get("item_id")
@@ -103,7 +120,10 @@ async def getItemInfo(request: fastapi.Request):
 
 @app.get(base_url + "/review_info")
 async def getReviewInfo(request: fastapi.Request):
-    token_payload = await getPayload(request)
+    ok, token_payload = await getPayload(request)
+    if not ok:
+        return fastapi.responses.JSONResponse({"message": "Token is not valid"},
+                                              status_code=status.HTTP_401_UNAUTHORIZED)
 
     try:
         review_id = request.query_params.get("review_id")
@@ -129,19 +149,22 @@ async def getReviewInfo(request: fastapi.Request):
 
 @app.get(base_url + "/get_cart")
 async def get_cart(request: fastapi.Request):
-    token_payload = await getPayload(request)
+    ok, token_payload = await getPayload(request)
+    if not ok:
+        return fastapi.responses.JSONResponse({"message": "Token is not valid"},
+                                              status_code=status.HTTP_401_UNAUTHORIZED)
 
     try:
-        user_id = token_payload["user_id"]
+        user_id = token_payload["data"]["id"]
     except Exception as ex:
         body = {"message": ex}
         return fastapi.responses.JSONResponse(body,
                                               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     try:
-        cart = await models.Cart.get(user_id=user_id).values()
+        cart = await models.Cart.get(id=user_id).values()
     except tortoise.exceptions.DoesNotExist as ex:
-        body = {"message": f"Car for specified user doesn't exist"}
+        body = {"message": f"Cart for specified user doesn't exist"}
         return fastapi.responses.JSONResponse(body, status_code=status.HTTP_400_BAD_REQUEST)
 
     body = {"id": cart["id"], "items_ids": cart["items_ids"]}
