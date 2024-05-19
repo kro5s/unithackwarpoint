@@ -113,7 +113,19 @@ async def root():
 # status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
-@app.get(base_url + "/product/{product_id}")
+
+@app.get(base_url + "/products")
+async def retrieve_products(request: fastapi.Request):
+    try:
+        products = await models.Product.all().values()
+        return fastapi.responses.JSONResponse(products,
+                                              status_code=status.HTTP_200_OK)
+    except Exception as e:
+        body = {"message": f"products not found, {e}"}
+        return fastapi.responses.JSONResponse(
+            body, status_code=status.HTTP_401_NOT_ACCEPTABLE)
+
+@app.get(base_url + "/products/{product_id}")
 async def getProductInfo(product_id: int, request: fastapi.Request):
     try:
         product_info = await models.Product.get(id=int(product_id)).values()
@@ -188,18 +200,6 @@ async def set_cart(request: fastapi.Request):
     return fastapi.responses.JSONResponse(
         "{}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
-
-@app.get(base_url + "/products")
-async def retrieve_products(request: fastapi.Request):
-    try:
-        products = await models.Product.all().values()
-        body = {"products": products}
-        return fastapi.responses.JSONResponse(body,
-                                              status_code=status.HTTP_200_OK)
-    except Exception as e:
-        body = {"message": f"products not found, {e}"}
-        return fastapi.responses.JSONResponse(
-            body, status_code=status.HTTP_401_NOT_ACCEPTABLE)
 
 
 @app.post(base_url + "/place_order")
