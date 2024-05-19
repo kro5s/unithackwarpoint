@@ -14,7 +14,7 @@ const Cart = () => {
     const cartProducts = useAppSelector(state => selectProductByIds(state, cartItemsProductsIds))
 
     const totalPrice = cartItems.reduce((acc, item) => {
-        const product = cartProducts.find(product => product!.id === item.id);
+        const product = cartProducts.find(product => product!.id === item.productId);
 
         return acc + product!.price * item.quantity;
     }, 0)
@@ -23,7 +23,7 @@ const Cart = () => {
 
     const [modalOpened, setModalOpened] = useState(false)
 
-    const cartIsEmpty = cartProducts.length == 0
+    const cartIsEmpty = cartProducts.length === 0
 
     return (
         <>

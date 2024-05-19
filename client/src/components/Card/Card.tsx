@@ -18,9 +18,9 @@ const Card: React.FC<IProduct> = ({id, name, img, category, price, content}) => 
 
     return (
         <>
-            <article className="p-6 rounded bg-dark-secondary relative z-10 shadow cursor-pointer"
+            <article className="p-6 rounded-xl bg-dark-secondary relative z-10 shadow cursor-pointer"
                      onClick={() => setModalOpened(true)}>
-                <img src={img} alt="" className="object-cover aspect-video rounded"/>
+                <img src={img} alt="" className="object-cover aspect-video rounded-xl"/>
                 <div className="pt-6 pb-4"><span className="font-bold text-xl">{name}</span></div>
                 <p className="line-clamp-3 text-sm">{content}</p>
                 <div className="pt-12 flex items-center justify-between">

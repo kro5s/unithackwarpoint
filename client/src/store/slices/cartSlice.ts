@@ -6,10 +6,8 @@ import {RootState} from "../store";
 const initialState : InitialReducerState<ICartItem> = {
     status: LoadingStatus.IDLE,
     entities: [
-        {id: 0, cartId: 0, productId: 0, quantity: 2},
-        {id: 1, cartId: 0, productId: 1, quantity: 1},
-        {id: 2, cartId: 0, productId: 2, quantity: 2},
-        {id: 3, cartId: 0, productId: 3, quantity: 3}
+        {id: 0, cartId: 0, productId: 1, quantity: 2},
+        {id: 1, cartId: 0, productId: 2, quantity: 1},
     ]
 }
 
