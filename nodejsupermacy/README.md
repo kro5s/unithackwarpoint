@@ -131,3 +131,56 @@ Errors:
 - 401 "Invalid token."
 - 401 "Token expired."
 - 500 "Internal server error."
+
+
+### Get Task
+
+`GET /api/task`
+Returns all actual tasks
+Response:
+
+```json
+{
+  "message": "ok",
+  "tasks": [
+    {
+      "id": 0,
+      "name": "example",
+      "starts": "Date ISO string",
+      "outdates": "Date ISO string",
+      "case": {
+        "id": 0,
+        "name": "name",
+        "image": "path/to/image"
+      }
+    }
+  ]
+}
+```
+
+`GET /api/task?id=0`
+Returns specific task
+Response:
+```json
+{
+  "message": "ok",
+  "task": {
+    "id": 0,
+    "name": "example",
+    "starts": "Date ISO string",
+    "outdates": "Date ISO string",
+    "case": {
+      "id": 0,
+      "name": "name",
+      "image": "path/to/image"
+    }
+  }
+}
+```
+
+Errors:
+- 400 Provide valid id parameter.
+- 401 Invalid Token.
+- 401 Token Expired.
+- 404 Task with id {id} not found.
+- 500 Internal Server Error.

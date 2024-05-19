@@ -14,9 +14,49 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  phone    String @unique
-  name     String
-  password String
+  id             Int              @id @default(autoincrement())
+  email          String           @unique
+  phone          String           @unique
+  name           String
+  password       String
+  TaskCompletion TaskCompletion[]
+}
+
+model Task {
+  id             Int              @id @default(autoincrement())
+  name           String
+  starts         DateTime         @default(now())
+  outdates       DateTime
+  case           Case             @relation(fields: [caseId], references: [id])
+  caseId         Int
+  TaskCompletion TaskCompletion[]
+}
+
+model Card {
+  id           Int            @id @default(autoincrement())
+  name         String
+  image        String
+  CardsInCases CardsInCases[]
+}
+
+model Case {
+  id           Int            @id @default(autoincrement())
+  CardsInCases CardsInCases[]
+  Task         Task[]
+}
+
+model CardsInCases {
+  id     Int  @id @default(autoincrement())
+  case   Case @relation(fields: [caseId], references: [id])
+  caseId Int
+  card   Card @relation(fields: [cardId], references: [id])
+  cardId Int
+}
+
+model TaskCompletion {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  task   Task @relation(fields: [taskId], references: [id])
+  userId Int
+  taskId Int
 }
