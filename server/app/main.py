@@ -144,7 +144,7 @@ async def getProductInfo(product_id: int, request: fastapi.Request):
     try:
         product_info = await models.Product.get(id=int(product_id)).values()
     except tortoise.exceptions.DoesNotExist as ex:
-        body = {"message": f"Specified product_id doesn't exist"}
+        body = {"message": f"Specified productId doesn't exist"}
         return fastapi.responses.JSONResponse(body, status_code=status.HTTP_400_BAD_REQUEST)
     except Exception as ex:
         body = {"message": f"Unknown error: {ex}"}
@@ -180,11 +180,11 @@ async def get_cart(request: fastapi.Request):
     products_in_cart = []
 
     for product_in_cart in await models.CartItem.all():
-        if product_in_cart.cart_id == user_id:
+        if product_in_cart.cartId == user_id:
             product_in_cart_json = {
                 "id": product_in_cart.id,
-                "cartId": product_in_cart.cart_id,
-                "productId": product_in_cart.product_id,
+                "cartId": product_in_cart.cartId,
+                "productId": product_in_cart.productId,
                 "quantity": product_in_cart.quantity
             }
             products_in_cart.append(product_in_cart_json)
@@ -245,7 +245,7 @@ async def set_quantity(request: fastapi.Request):
         cart_item = await models.CartItem.get(id=cart_item_id)
 
     except tortoise.exceptions.DoesNotExist as ex:
-        return fastapi.responses.JSONResponse({"message": "You have provided not existing cart_id"}, status_code=status.HTTP_400_BAD_REQUEST)
+        return fastapi.responses.JSONResponse({"message": "You have provided not existing cart_item_id"}, status_code=status.HTTP_400_BAD_REQUEST)
 
     cart_item.quantity = new_quantity
     await cart_item.save()
