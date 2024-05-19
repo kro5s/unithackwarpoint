@@ -15,8 +15,8 @@ class Order(Model):
 
 class CartItem(Model):
     id = fields.IntField(pk=True, index=True)
-    cart_id = fields.IntField()
-    product_id = fields.IntField()
+    cartId = fields.IntField()
+    productId = fields.IntField()
     quantity = fields.IntField()
 
 
