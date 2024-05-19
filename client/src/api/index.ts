@@ -11,7 +11,7 @@ export default class Api {
 	) {
 	}
 
-	private async makeRequest(url: string, init?: RequestInit) {
+	public async makeRequest(url: string, init?: RequestInit) {
 		let reqInit: RequestInit = {
 			...init,
 			headers: [
@@ -98,7 +98,7 @@ export default class Api {
 	}
 }
 
-export function useApi(baseUrl = "http://localhost:3000/") {
+export function useApi(baseUrl = "http://localhost:3000/"): Api {
 	const tokenPair = useSelector(selectTokenPair)
 	const dispatch = useDispatch()
 	return new Api(tokenPair.accessToken, tokenPair.refreshToken, dispatch, baseUrl)
