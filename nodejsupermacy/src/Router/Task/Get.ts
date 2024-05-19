@@ -1,7 +1,4 @@
-import Router from "../../Types/Router";
 import Route from "../../Types/Route";
-import {JsonWebTokenError, TokenExpiredError} from "jsonwebtoken";
-import Token from "../../Service/Token";
 import {checkAuthOrSendError} from "../../Tools/Auth";
 import App from "../../App";
 
