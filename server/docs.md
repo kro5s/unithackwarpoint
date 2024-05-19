@@ -2,15 +2,120 @@
 
 ## Documentation
 
-### get cart
+Base url for Shop is `/api/shop`
 
-`GET /api/shop/get_cart`
+### Retrieve info about item
+
+`GET /item_info`
 
 Body:
 
 ```json
 {
   "token": "string, required",
+  "item_id": "string, required"
+}
+```
+
+Response example:
+
+```json
+{
+  "item_id": 3,
+  "item_price": 500,
+  "item_description": "Plain description",
+  "item_image_url": "/data/images/item_1.png",
+  "item_reviews": [
+      "review_id_1",
+      "review_id_2"
+  ]
+}
+```
+
+Status codes:
+
+- 200 "OK"
+- 400 "Bad request"
+- 406 "Item with the corresponding id doesn't exist" 
+- 500 "Server error"
+
+### Retrieve info about review
+
+`GET /review_info`
+
+Body:
+
+```json
+{
+  "token": "string, required",
+  "review_id": "string, required"
+}
+```
+
+Response example:
+
+```json
+{
+  "review_id": 5,
+  "review_author": "Aleksey",
+  "review_description": "I love that website",
+  "review_stars": 5
+}
+```
+
+Status codes:
+
+- 200 "OK"
+- 400 "Bad request"
+- 406 "Item with the corresponding id doesn't exist" 
+- 500 "Server error"
+
+### Retrieve items in cart
+
+Returns pairs item_id:amount
+
+`GET /get_cart`
+
+Body:
+
+```json
+{
+  "token": "string, required"
+}
+```
+
+Response example:
+
+```json
+{
+  "items": {
+      "item_1": 1,
+      "item_7": 10,
+      "item_13": 4
+  }
+}
+```
+
+Status codes:
+
+- 200 "OK"
+- 401 "Unauthorized access"
+- 500 "Internal server error"
+
+### Set cart
+
+`POST /set_cart`
+
+Body:
+
+```json
+{
+  "token": "string, required",
+  "items": {
+      "item_1": 1,
+      "item_7": 10,
+      "item_13": 4 
+    }
 }
 ```
 
@@ -22,44 +127,16 @@ Response:
 }
 ```
 
-Errors:
+Status codes:
 
-- 400 ""
-- 409 ""
-- 409 ""
-- 500 "Internal server error."
+- 200 "OK"
+- 400 "Bad request"
+- 401 "Unauthorized access"
+- 500 "Internal server error"
 
-### set cart
+### Retrieve items
 
-`POST /api/shop/set_cart`
-
-Body:
-
-```json
-{
-  "token": "string, required",
-  "dict": "dict[id:count]?, required"
-}
-```
-
-Response:
-
-```json
-{
-  "message": "ok"
-}
-```
-
-Errors:
-
-- 400 ""
-- 401 ""
-- 404 ""
-- 500 "Internal server error."
-
-### retrieve items
-
-`GET /api/shop/retrieve_items`
+`GET /retrieve_items`
 
 Body:
 
@@ -73,27 +150,35 @@ Response:
 
 ```json
 {
-  "list_items": "item"
+  "items": {
+      "item_1": 1,
+      "item_7": 10,
+      "item_13": 4 
+    }
 }
 ```
 
 Errors:
 
-- 400 ""
-- 401 ""
-- 401 ""
-- 500 "Internal server error."
+Status codes:
+
+- 200 "OK"
+- 500 "Internal server error"
 
 ### place order
 
-`POST /api/shop/place_order`
+`POST /place_order`
 
 Body:
 
 ```json
 {
   "token": "string, required",
-  "items": "dict[item:count]"
+  "items": {
+      "item_1": 1,
+      "item_7": 10,
+      "item_13": 4 
+    }
 }
 ```
 
@@ -107,14 +192,15 @@ Response:
 
 Errors:
 
-- 400 ""
-- 401 ""
-- 401 ""
-- 500 "Internal server error."
+Status codes:
+
+- 200 "OK"
+- 401 "Unauthorized access"
+- 500 "Internal server error"
 
 ### get orders
 
-`GET /api/shop/get_orders`
+`GET /get_orders`
 
 Body:
 
@@ -128,13 +214,24 @@ Response:
 
 ```json
 {
-  "list_orders":"list[items+описание классов]"
+  "orders": {
+    "order_1": {
+          "items": {
+              "item_1": 1,
+              "item_7": 10,
+              "item_13": 4 
+          }
+        },
+    "order_2": {
+      ...
+    }
+  }
 }
 ```
 
 Errors:
 
-- 400 ""
-- 401 ""
-- 401 ""
+- 200 "OK"
+- 400 "Bad request"
+- 401 "Unauthorized access"
 - 500 "Internal server error."
