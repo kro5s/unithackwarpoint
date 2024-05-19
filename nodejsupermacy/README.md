@@ -117,7 +117,7 @@ Response:
 
 ```json
 {
-  "message":"ok",
+  "message": "ok",
   "auth": {
     "access": "access token here",
     "refresh": "refresh token here"
@@ -131,7 +131,6 @@ Errors:
 - 401 "Invalid token."
 - 401 "Token expired."
 - 500 "Internal server error."
-
 
 ### Get Task
 
@@ -161,6 +160,7 @@ Response:
 `GET /api/task?id=0`
 Returns specific task
 Response:
+
 ```json
 {
   "message": "ok",
@@ -179,8 +179,108 @@ Response:
 ```
 
 Errors:
-- 400 Provide valid id parameter.
-- 401 Invalid Token.
-- 401 Token Expired.
-- 404 Task with id {id} not found.
-- 500 Internal Server Error.
+
+- 400 "Provide valid id parameter."
+- 401 "Invalid Token."
+- 401 "Token Expired."
+- 404 "Task with id {id} not found."
+- 500 "Internal Server Error."
+
+### Submit Task
+
+`POST /api/task/submit`
+
+Body:
+
+```json
+{
+  "id": 0
+}
+```
+
+Response:
+
+```json
+{
+  "message": "ok"
+}
+```
+
+Errors:
+
+- 400 "Provide valid id parameter."
+- 401 "Invalid Token."
+- 401 "Token Expired."
+- 404 "Task with id {id} not found."
+- 500 "Internal Server Error."
+
+### Get Case
+
+`GET /api/case`
+Returns all cases
+Response:
+
+```json
+{
+  "message": "ok",
+  "cases": [
+    {
+      "id": 0,
+      "name": "example",
+      "image": "path/to/image"
+    }
+  ]
+}
+```
+
+`GET /api/task?id=0`
+Returns specific task
+Response:
+
+```json
+{
+  "message": "ok",
+  "case": {
+    "id": 0,
+    "name": "example",
+    "image": "path/to/image"
+  }
+}
+```
+
+Errors:
+
+- 400 "Provide valid id parameter."
+- 401 "Invalid Token."
+- 401 "Token Expired."
+- 404 "Task with id {id} not found."
+- 500 "Internal Server Error."
+
+### Open case
+
+`POST /api/case/open`
+
+Body:
+
+```json
+{
+  "id": 0
+}
+```
+
+Response:
+
+```json
+{
+  "message": "ok"
+}
+```
+
+Errors:
+
+- 400 "Provide valid id parameter."
+- 401 "Invalid Token."
+- 401 "Token Expired."
+- 403 "You can't open this case."
+- 404 "Case with id {id} not found."
+- 500 "Internal Server Error."
