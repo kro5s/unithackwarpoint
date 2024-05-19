@@ -53,14 +53,14 @@ async def initData():
                                 content = "description")
     await models.CartItem.update_or_create(
         id=1,
-        cart_id=1,
-        product_id=1,
+        cartId=1,
+        productId=1,
         quantity=2
     )
     await models.CartItem.update_or_create(
         id=2,
-        cart_id=1,
-        product_id=2,
+        cartId=1,
+        productId=2,
         quantity=10
     )
 
@@ -183,15 +183,15 @@ async def get_cart(request: fastapi.Request):
         if product_in_cart.cart_id == user_id:
             product_in_cart_json = {
                 "id": product_in_cart.id,
-                "cart_id": product_in_cart.cart_id,
-                "product_id": product_in_cart.product_id,
+                "cartId": product_in_cart.cart_id,
+                "productId": product_in_cart.product_id,
                 "quantity": product_in_cart.quantity
             }
             products_in_cart.append(product_in_cart_json)
 
     return fastapi.responses.JSONResponse(products_in_cart, status_code=status.HTTP_200_OK)
 
-@app.post(base_url + "/cart/add_item")
+@app.post(base_url + "/cart/add")
 async def add_item(request: fastapi.Request):
     try:
         ok, token_payload = await getPayload(request)
@@ -207,7 +207,7 @@ async def add_item(request: fastapi.Request):
         body = await request.json()
 
         user_id = token_payload["data"]["id"]
-        product_id = body["product_id"]
+        product_id = body["productId"]
         new_quantity = body["quantity"]
 
     except Exception as ex:
@@ -215,14 +215,14 @@ async def add_item(request: fastapi.Request):
                                               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     try:
-        await models.CartItem.update_or_create(product_id=product_id, quantity=new_quantity, cart_id=user_id)
+        await models.CartItem.update_or_create(productId=product_id, quantity=new_quantity, cartId=user_id)
     except Exception as ex:
         return fastapi.responses.JSONResponse({"message": ex}, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return fastapi.responses.JSONResponse({"message": "ok"}, status_code=status.HTTP_200_OK)
 
 
-@app.post(base_url + "/cart/set_quantity")
+@app.post(base_url + "/cart/quantity")
 async def set_quantity(request: fastapi.Request):
     ok, token_payload = await getPayload(request)
     if not ok:
@@ -252,7 +252,7 @@ async def set_quantity(request: fastapi.Request):
 
     return fastapi.responses.JSONResponse({"message": "ok"}, status_code=status.HTTP_200_OK)
 
-@app.post(base_url + "/cart/remove_cart_item")
+@app.post(base_url + "/cart/remove")
 async def remove_cart_item(request: fastapi.Request):
     ok, token_payload = await getPayload(request)
     if not ok:
