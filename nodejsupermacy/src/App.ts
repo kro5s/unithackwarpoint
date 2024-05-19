@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import express, { Application } from "express";
 import router from "./Router";
+import cors from "cors"
 
 export default class App {
 	public readonly api: Application
@@ -23,8 +24,10 @@ export default class App {
 		if (App._this != null) throw new Error("Singletone must be single!")
 		App._this = this
 		this.api = express()
+		this.api.use(cors())
 		this.prisma = new PrismaClient()
 		this.api.use(express.json())
-		this.api.use("/", router.router)
+		const routePrefix = process.env.ROUTE_PREFIX || "" + "/"
+		this.api.use(routePrefix, router.router)
 	}
 }

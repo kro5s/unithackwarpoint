@@ -8,6 +8,7 @@ import store from "./store/store";
 import AccountSettingsRoute from "./routes/AccountSettingsRoute";
 import OrdersHistoryRoute from "./routes/OrdersHistoryRoute";
 import CartRoute from "./routes/CartRoute";
+import Registration from "./routes/Registration";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
     {
         path: '/cart',
         element: <CartRoute />
+    },
+    {
+        path: '/registration',
+        element: <Registration />
     },
     {
         path: '/*',
