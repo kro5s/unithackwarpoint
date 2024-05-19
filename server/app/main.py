@@ -73,6 +73,8 @@ async def getPayload(request: fastapi.Request) -> tuple[bool, dict]:
 app = FastAPI()
 
 base_url = os.getenv("BASE_URL_SHOP")
+if base_url is None:
+    base_url = ""
 
 
 @app.get(base_url)
