@@ -6,7 +6,8 @@ export default class Api {
 	constructor(
 		private accessToken: string,
 		private refreshToken: string,
-		private dispatch: AppDispatch
+		private dispatch: AppDispatch,
+		public readonly baseUrl: string
 	) {
 	}
 
@@ -97,8 +98,8 @@ export default class Api {
 	}
 }
 
-export function useApi() {
+export function useApi(baseUrl = "http://localhost:3000/") {
 	const tokenPair = useSelector(selectTokenPair)
 	const dispatch = useDispatch()
-	return new Api(tokenPair.accessToken, tokenPair.refreshToken, dispatch)
+	return new Api(tokenPair.accessToken, tokenPair.refreshToken, dispatch, baseUrl)
 }
