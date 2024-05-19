@@ -19,7 +19,7 @@ export default class Api {
 			]
 		}
 		let data = await fetch(url, reqInit);
-		if (data.status != 401) {
+		if (data.status == 401) {
 			const res = await this.refreshTokens()
 			if (!res) throw new Error("Token Expired.")
 			data = await fetch(url, reqInit)
