@@ -41,6 +41,8 @@ model Card {
 
 model Case {
   id           Int            @id @default(autoincrement())
+  name         String
+  image        String
   CardsInCases CardsInCases[]
   Task         Task[]
 }

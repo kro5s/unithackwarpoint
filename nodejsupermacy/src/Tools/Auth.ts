@@ -12,10 +12,12 @@ export function checkAuthOrSendError(req: Request, res: Response) {
 		return Token.validate(token)
 	} catch (e) {
 		if (e instanceof JsonWebTokenError) {
-			return res.status(401).json({error: {message: "Invalid token."}})
+			res.status(401).json({error: {message: "Invalid token."}})
+			return
 		}
 		if (e instanceof TokenExpiredError) {
-			return res.status(401).json({error: {message: "Token expired."}})
+			res.status(401).json({error: {message: "Token expired."}})
+			return
 		}
 	}
 }
