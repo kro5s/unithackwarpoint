@@ -22,7 +22,7 @@ services:
     image: "postgres"
     container_name: unit_db
     volumes:
-      - unit:/home/postgres_data
+      - unit:/var/lib/postgresql/data
     ports:
       - '5432:5432'
     healthcheck:

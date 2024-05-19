@@ -8,13 +8,14 @@ class Product(Model):
     category = fields.TextField()
     content = fields.TextField()
 
+
 class Order(Model):
     id = fields.IntField(pk=True)
 
 
 class CartItem(Model):
-    id = fields.IntField()
-    cart_id = fields.IntField(pk=True)
+    id = fields.IntField(pk=True, index=True)
+    cart_id = fields.IntField()
     product_id = fields.IntField()
     quantity = fields.IntField()
 
