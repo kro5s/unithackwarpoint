@@ -191,8 +191,8 @@ async def get_cart(request: fastapi.Request):
 
     return fastapi.responses.JSONResponse(products_in_cart, status_code=status.HTTP_200_OK)
 
-@app.get(base_url + "/cart/add_item")
-async def set_quantity(request: fastapi.Request):
+@app.post(base_url + "/cart/add_item")
+async def add_item(request: fastapi.Request):
     ok, token_payload = await getPayload(request)
     if not ok:
         return fastapi.responses.JSONResponse({"message": "Token is not valid"},
@@ -218,7 +218,7 @@ async def set_quantity(request: fastapi.Request):
     return fastapi.responses.JSONResponse({"message": "ok"}, status_code=status.HTTP_200_OK)
 
 
-@app.get(base_url + "/cart/set_quantity")
+@app.post(base_url + "/cart/set_quantity")
 async def set_quantity(request: fastapi.Request):
     ok, token_payload = await getPayload(request)
     if not ok:
@@ -248,7 +248,7 @@ async def set_quantity(request: fastapi.Request):
 
     return fastapi.responses.JSONResponse({"message": "ok"}, status_code=status.HTTP_200_OK)
 
-@app.get(base_url + "/cart/remove_cart_item")
+@app.post(base_url + "/cart/remove_cart_item")
 async def remove_cart_item(request: fastapi.Request):
     ok, token_payload = await getPayload(request)
     if not ok:
