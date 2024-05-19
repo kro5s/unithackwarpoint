@@ -1,0 +1,21 @@
+id,name,content,price,img,category
+1,VR Vision Mug,"Кружка с термочувствительной покраской, которая при нагревании отображает виртуальный мир.",1299,app/data/images/vr_vision_mug.jpg,cup
+2,Sticker Pack “Virtuality”,Набор из 10 виниловых стикеров с изображениями популярных VR-игр и символов.,799,app/data/images/sticker_pack_virtuality.jpg,stick
+3,T-Shirt “Inside the Game”,"Футболка с уникальным дизайном, который меняется в зависимости от угла зрения, создавая иллюзию VR.",1999,app/data/images/tshirt_inside_the_game.jpg,t-shirt
+4,VR Experience Kit,"Полный набор для новичков в VR, включая гарнитуру, контроллеры и подписку на месяц к выбору VR-игр.",29999,app/data/images/vr_experience_kit.jpg,vr
+5,Mug “Reality Check”,"Кружка с аугментированной реальностью, которая через специальное приложение позволяет видеть 3D-объекты.",1599,app/data/images/cup_reality_check.jpg,cup
+6,Sticker “Avatar”,Персонализированный стикер с аватаром пользователя в VR.(Цена за штуку),499,app/data/images/sticker_avatar.jpg,stick
+7,T-Shirt “VR World Explorer”,"Футболка с интерактивной карточкой мира VR, которая отслеживает ваши посещения в разных VR-мирах.",2499,app/data/images/tshirt_vr_world_explorer.jpg,t-shirt
+8,VR Starter Pack,"Начальный набор для VR-путешественников, включающий в себя гарнитуру VR и карту мировых VR-достопримечательностей.",19999,app/data/images/vr_starter_pack.jpg,vr
+9,Mug “Virtual Coffee”,"Кружка с дополненной реальностью, которая показывает анимированные эффекты, когда вы пьете кофе.",1799,app/data/images/mug_virtual_coffee.jpg,cup
+10,Sticker Set “VR Landscapes”,Набор стикеров с великолепными пейзажами из виртуальных миров.,999,app/data/images/sticker_vr_landsacapes.jpg,stick
+11,Кружка “Виртуальный Рассвет”,"Кружка с термочувствительной покраской, которая при нагревании отображает панорамный вид виртуального мира.",1500,app/data/images/cup_virtual_sun_rise.jpg,cup
+12,Стикер “VR World Explorer”,Набор стикеров с изображениями популярных VR игр и ландшафтов.,500,app/data/images/sticker_vr_explorer.jpg,stick
+13,Футболка “Reality? Optional”,"Футболка с интерактивным AR-кодом, который запускает VR-демонстрацию при сканировании.",2500,app/data/images/tshirt_reality_optional.jpg,t-shirt
+14,VR Starter Kit “Первый Шаг”,"Набор для новичков в VR, включающий гарнитуру, контроллеры и подписку на месяц к выбору VR игр.",19900,app/data/images/vr_starter_kit.jpg,vr
+15,Кружка “Кофе в Метавселенной”,"Кружка с AR-метками, которая в виртуальной реальности превращается в артефакт из игры.",1800,app/data/images/mug_coffee_metha.jpg,cup
+16,Стикер “VR Visionary”,Стикеры с цитатами известных разработчиков VR и изображениями иконических VR-шлемов.,600,app/data/images/sticker_vr_visionary.jpg,stick
+17,Футболка “Inside the Game”,"Футболка с уникальным дизайном, который меняется в зависимости от угла зрения, создавая иллюзию VR.",3000,app/data/images/tshirt_inside_the_game_.jpg,t-shirt
+18,VR Experience Pack “Погружение”,Подарочный набор с VR-очками и купонами на эксклюзивные VR-события.,15000,app/data/images/vr_experience_pack_dive.jpg,vr
+19,Кружка “Пиксельный Портал”,"Кружка с пиксельным дизайном, который оживает и анимируется при использовании специального приложения.",1200,app/data/images/cup_pixel.jpg,cup
+20,Футболка “Escape Reality”,"Футболка с логотипом VR и слоганом “Escape Reality”, выполненная в стиле киберпанк.",2800,app/data/images/tshirt_escape_reality.jpg,t-shirt
