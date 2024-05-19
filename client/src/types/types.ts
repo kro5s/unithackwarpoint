@@ -4,3 +4,8 @@ export enum LoadingStatus {
     SUCCEEDED,
     FAILED
 }
+
+export interface InitialReducerState<T> {
+    status: LoadingStatus;
+    entities: T[]
+}

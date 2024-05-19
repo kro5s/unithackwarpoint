@@ -1,18 +1,28 @@
 import React from 'react';
-import {useHideScroll} from "../../hooks/hooks";
+import {useAppDispatch, useHideScroll} from "../../hooks/hooks";
 import {IProduct} from "../../types/models";
 import Button, {ButtonTypes} from "../UI/Button/Button";
+import {cartActions} from "../../store/slices/cartSlice";
 
 type Props = IProduct & { opened: boolean, closeModal: () => void }
 
 const CardModal: React.FC<Props> = ({ opened, closeModal, category, img, content, id, name, price }) => {
+    const dispatch = useAppDispatch()
+
     useHideScroll([opened])
+
+    const handleAddNewItemToCart = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        dispatch(cartActions.addNewItem({ id, productId: id, cartId: 0, quantity: 1 }))
+    }
 
     return (
         <div
-            className="h-full z-50 fixed left-0 right-0 top-0 bottom-0 bg-white/[.2] flex justify-center overflow-y-scroll"
+            className="h-full z-50 fixed left-0 right-0 top-0 bottom-0 bg-white/[.2] flex justify-center items-center overflow-y-scroll"
             onMouseDown={closeModal}>
-            <div className="relative bg-dark-bg my-20 h-fit rounded-xl shadow p-16"
+            <div className="relative bg-dark-bg h-fit rounded-xl shadow p-16"
                  onMouseDown={(e) => e.stopPropagation()}
             >
                 <div className="flex gap-x-16">
@@ -32,7 +42,7 @@ const CardModal: React.FC<Props> = ({ opened, closeModal, category, img, content
                         <div className="pt-2 pb-4"><span className="text-sm text-white/[.2]">{category}</span></div>
                         <p>{content}</p>
                         <div className="mt-16 mb-6"><span className="font-bold text-2xl">{price}₽</span></div>
-                        <Button type={ButtonTypes.OUTLINED}>Добавить в корзину</Button>
+                        <Button type={ButtonTypes.OUTLINED} onClick={handleAddNewItemToCart}>Добавить в корзину</Button>
                     </div>
                 </div>
 

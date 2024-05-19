@@ -1,16 +1,14 @@
 import React from 'react';
 
 interface Props {
-    img: string;
     orderId: string;
     orderPrice: string;
 }
 
-const OrderHistoryCard: React.FC<Props> = ({ img, orderId, orderPrice }) => {
+const OrderHistoryCard: React.FC<Props> = ({ orderId, orderPrice }) => {
     return (
         <div className="p-4 bg-dark-secondary rounded flex items-stretch shadow">
-            <img src="https://placehold.co/600x400" alt="" className="size-[88px] object-cover rounded"/>
-            <div className="ml-8 mr-auto">
+            <div className="mr-auto">
                 <div className="mb-2.5"><span className="font-bold">Заказ N{orderId}</span></div>
                 <ul className="space-y-1">
                     <li className="text-white/[.2]">x1 Lorem ipsum</li>

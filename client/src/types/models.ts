@@ -6,3 +6,10 @@ export interface IProduct {
     category: string;
     content: string;
 }
+
+export interface ICartItem {
+    id: number;
+    cartId: number;
+    productId: number;
+    quantity: number;
+}

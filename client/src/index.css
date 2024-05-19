@@ -34,3 +34,7 @@ body {
     padding: 0 15px;
     margin: 0 auto;
 }
+
+.my-transition {
+    transition: 0.5s all ease-in;
+}
